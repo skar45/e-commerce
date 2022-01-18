@@ -35,17 +35,20 @@ const ProductShow = ({ product }: Product) => {
   });
 
   return (
-    <div className=" pt-24 px-12 flex flex-col space-x-2">
-      <div className=" flex flex-row w-3/4 h-screen overflow-hidden">
-        <div className="p-2" style={{ width: '516px' }}>
-          <Carousel data={imgSlides} width={'500'} />
+    <div className=" pt-24 px-4 sm:px-12 flex flex-col space-x-2">
+      <div className=" flex flex-col md:flex-row sm:w-3/4 overflow-hidden">
+        <div
+          className="self-center sm:self-auto p-2"
+          style={{ width: '416px' }}
+        >
+          <Carousel data={imgSlides} width={'400'} />
         </div>
 
-        <p>{product.description}</p>
+        <p className="py-4">{product.description}</p>
       </div>
       <ProductCard product={product} />
 
-      <div className="h-screen ">
+      <div className=" ">
         <ReviewSection reviewData={product.Review} productId={product.id} />
       </div>
     </div>
@@ -79,13 +82,13 @@ const ProductCard = ({ product }: Product) => {
     }
   };
   return (
-    <div className="absolute right-0  w-1/4 h-full p-4">
-      <div className="sticky top-24 flex flex-col p-2">
+    <div className="sm:absolute right-5  sm:w-1/4 h-3/4">
+      <div className="sticky top-24 flex flex-col gap-1 py-4">
         <div className="text-xl">{product.title}</div>
-        <div className="flex">
+        {/* <div className="flex">
           <div></div>
           <div>Rating</div>
-        </div>
+        </div> */}
         <hr />
         <div className="text-right">${product.price}</div>
         <div>STOCK: {product.stock}</div>
@@ -137,7 +140,7 @@ const ReviewSection = ({
   console.log('rating: ', avgRating);
   return (
     <>
-      <div className="flex flex-col w-1/2">
+      <div className="flex flex-col w-full mt-12">
         <div>Customer Reviews</div>
         <div className="flex">
           <div className="flex flex-col justify-center p-2 ">
@@ -162,7 +165,7 @@ const ReviewSection = ({
           onClick={(e) => {
             setRev(!isOpen);
           }}
-          className="bg-blue-800 rounded-lg text-white p-2 w-1/2"
+          className="bg-blue-800 rounded-lg text-white p-2 max-w-sm"
         >
           Write a Review
         </button>
@@ -200,7 +203,7 @@ const ReviewRatings = ({ ratings }: { ratings: { [x: number]: number } }) => {
     <>
       {[5, 4, 3, 2, 1].map((r, i) => {
         return (
-          <div key={i} className="flex items-center space-x-2">
+          <div key={i} className="flex items-center gap-2">
             <span>{r} stars</span>
             <div className="w-24 rounded-full h-2 bg-blue-200 ">
               <div
@@ -232,8 +235,8 @@ const ReviewForm = ({
   const [rating, setRating] = useState<number>(1);
   console.log('rating set: ', rating);
   useEffect(() => {
-    formRef.current.style.transition = '2s';
-    formRef.current.style.maxHeight = '100%';
+    formRef.current.style.transition = 'all 1s';
+    formRef.current.style.height = '220px';
   }, []);
 
   const submitReview = async () => {
@@ -251,7 +254,7 @@ const ReviewForm = ({
   return (
     <div
       ref={formRef}
-      className="flex flex-col p-4 bg-gray-200 gap-2 w-full my-4 overflow-y-hidden max-h-0"
+      className="flex flex-col bg-gray-200 gap-2 w-full p-2 my-4 overflow-y-hidden h-0"
     >
       <ReviewStars rating={(v: number) => setRating(v)} />
       <form

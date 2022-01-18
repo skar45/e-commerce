@@ -8,7 +8,7 @@ import { AppProps } from 'next/app';
 
 const AppComponent = ({ Component, pageProps }: AppProps) => {
   return (
-    <div className="">
+    <div className="font-body">
       <StoreProvider>
         <div className="">
           <NavBar />

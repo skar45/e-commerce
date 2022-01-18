@@ -8,10 +8,12 @@ import { ReviewCard } from '../components/reviewCard';
 import SelectMenu from '../components/selectionMenu';
 import {
   addCartRequest,
+  createPaymentRequest,
   deleteCartRequest,
   delWishlistRequest,
   updateCartRequest,
 } from '../api/requests';
+import PaymentModal from '../components/paymentModal';
 
 enum activeTab {
   Cart = 'cart',
@@ -63,10 +65,10 @@ const Cart = () => {
     const dim = { initialX1, initialX2, x1, x2, width };
     setLine({ ...dim });
   };
-  console.log('render');
+
   return (
-    <div className="pt-24 px-16">
-      <div className="border-b-2 p-2">
+    <div className="pt-24 px-2 md:px-12">
+      <div className="border-b-2 p-1">
         <div className="flex" ref={tabRef}>
           <button
             className={`p-2 ${tab === 'cart' && 'text-red-500'}`}
@@ -101,30 +103,53 @@ const Cart = () => {
         {tab === 'cart' && <Underline dim={lineW} />}
         {tab === 'wish' && <Underline dim={lineW} />}
       </div>
-      <div className="flex bg-gray-200 p-2">
+      <div className="flex flex-col sm:flex-row bg-gray-200">
         {switchTab()}
-        <div className="flex flex-col bg-white p-4 border w-1/3">
-          <div className="font-bold font text-xl border-b-2 p-2">
-            Order Summary
+        <CheckOutCard items={store.data.items} />
+      </div>
+    </div>
+  );
+};
+
+const CheckOutCard = ({ items }: { items: StoreType['data']['items'] }) => {
+  const [clientId, setClientId] = useState<{ stripeSecret: string }>(null);
+  let total = 0;
+
+  const handleCheckout = async () => {
+    const response = await createPaymentRequest();
+    setClientId(response);
+    console.log('stripe res: ', response);
+  };
+
+  return (
+    <div className="flex flex-col bg-white p-4 sm:w-1/2">
+      <div className="font-bold font text-xl border-b-2 p-2">Order Summary</div>
+      {items.map((p, i) => {
+        total += p.Product.price * p.amount;
+        return (
+          <div className="flex justify-between" key={p.productId}>
+            <span>
+              {p.amount > 1
+                ? p.amount + ' ' + p.Product.title
+                : p.Product.title}
+            </span>
+            <span>${p.Product.price * p.amount}</span>
           </div>
-          {store.data.items.map((p, i) => {
-            return (
-              <div className="flex justify-between" key={p.productId}>
-                <span>
-                  {p.amount > 0
-                    ? p.amount + ' ' + p.Product.title
-                    : p.Product.title}
-                </span>
-                <span>${p.Product.price}</span>
-              </div>
-            );
-          })}
-          <div className="p-2 border-t-2">
-            <button className="bg-green-600 text-white w-full rounded p-2">
-              CHECKOUT
-            </button>
-          </div>
-        </div>
+        );
+      })}
+      <hr />
+      <div className="flex justify-between">
+        <span>Total</span>
+        <span>${total}</span>
+      </div>
+      <div className="p-2 border-t-2">
+        <button
+          className="bg-green-600 text-white w-full rounded p-2"
+          onClick={handleCheckout}
+        >
+          CHECKOUT
+        </button>
+        {clientId && <PaymentModal clientSecret={clientId.stripeSecret} />}
       </div>
     </div>
   );
@@ -133,7 +158,7 @@ const Cart = () => {
 const ShoppingCart = ({ items }: { items: StoreType['data']['items'] }) => {
   console.log(items);
   return (
-    <ol className="flex flex-col border-b-2 p-3 w-full">
+    <ol className="flex flex-col border-b-2 w-full">
       {items.map((p, i) => {
         return (
           <Fragment key={i}>
@@ -165,32 +190,34 @@ const CartCard = ({ item }: { item: StoreType['data']['items'][number] }) => {
   };
 
   return (
-    <li className="relative flex justify-between border-t-2 p-4">
+    <li className="relative flex justify-between border-t-2 p-2">
       <div className="flex space-x-2">
-        <div className="h-full">
-          <Image src={`/${item.Product.img[0]}`} width="300" height="300" />
+        <div className="max-h-24 max-w-24 sm:max-h-full sm:max-w-full">
+          <Image src={`/${item.Product.img[0]}`} width="200" height="200" />
         </div>
         <div className="flex flex-col">
           <div className="font-bold">{item.Product.title}</div>
-          <div className="flex justify-between">
+          <div className="flex">
             <span className="self-center">QTY: </span>
-            <SelectMenu
-              title={item.amount.toString()}
-              options={Array.from(Array(10).keys()).map((i) => {
-                return {
-                  name: (i + 1).toString(),
-                  action: () => {
-                    editCart(i + 1);
-                    console.log('action: ', i + 1);
-                  },
-                };
-              })}
-            />
+            <div className="">
+              <SelectMenu
+                title={item.amount.toString()}
+                options={Array.from(Array(10).keys()).map((i) => {
+                  return {
+                    name: (i + 1).toString(),
+                    action: () => {
+                      editCart(i + 1);
+                      console.log('action: ', i + 1);
+                    },
+                  };
+                })}
+              />
+            </div>
           </div>
         </div>
       </div>
       <button
-        className="absolute bottom-0 right-0 text-blue-500 underline"
+        className="absolute filter drop-shadow-lg bottom-3 right-3 bg-white rounded-xl p-2 bg-sh"
         onClick={deleteItem}
       >
         Delete
@@ -270,7 +297,7 @@ const Reviews = ({
 const Underline = ({ dim }: { dim: animateTab }) => {
   return (
     <>
-      <svg height="3" width={300}>
+      <svg height="3" width={260}>
         <line
           x1={dim.x1}
           x2={dim.x2}

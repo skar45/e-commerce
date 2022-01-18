@@ -1,1 +1,25 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+body {
+  scroll-behavior: smooth;
+}
+
+@font-face {
+  font-family: futura-book;
+  src: url(FuturaLT-Book.ttf);
+}
+
+@font-face {
+  font-family: futura-condensed;
+  src: url(FuturaLT-Condensed.ttf);
+}
+
+@font-face {
+  font-family: futura-extra-bold;
+  src: url(FuturaLT-ExtraBold.ttf);
+}
+
+@font-face {
+  font-family: futura-light;
+  src: url(FuturaLT-Light.ttf);
+}

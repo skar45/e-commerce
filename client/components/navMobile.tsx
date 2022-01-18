@@ -1,46 +1,33 @@
-import { BaseSyntheticEvent, useState, Fragment } from 'react';
+import {
+  BaseSyntheticEvent,
+  useState,
+  Fragment,
+  useRef,
+  useEffect,
+} from 'react';
 import { navItems, menuItem } from './types';
 
 const MobilePopup = ({ elements }: { elements: navItems[] }) => {
+  const mainRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    mainRef.current.style.transition = 'all 2s';
+    mainRef.current.style.maxHeight = '100vh';
+  }, []);
+
   return (
-    <div className="absolute mt-10 w-screen ml-4 border-2 bg-white transform -translate-x-full">
+    <div
+      ref={mainRef}
+      className="absolute mt-10 w-screen ml-4 border-2 bg-white transform -translate-x-full max-h-0 overflow-y-hidden"
+    >
       <div className="flex flex-col items-center space-y-2 p-4">
         <div>Cart</div>
 
         {elements.map((elem, idx) => {
           if (elem.item) {
-            const [list, setList] = useState([]);
-
             return (
               <Fragment key={idx}>
-                <div
-                  className="flex"
-                  onClick={(e: BaseSyntheticEvent) => {
-                    e.preventDefault();
-
-                    if (list.length > 0) {
-                      setList([]);
-                    } else {
-                      setList(elem.item);
-                    }
-                  }}
-                >
-                  {elem.name}
-                  {list.length > 0 ? (
-                    <span className="transform translate-y-0.5 material-icons">
-                      expand_less
-                    </span>
-                  ) : (
-                    <span className="transform translate-y-0.5 material-icons">
-                      expand_more
-                    </span>
-                  )}
-                </div>
-                {list.length > 0 && (
-                  <div className="flex flex-col items-center w-full bg-gray-300">
-                    <SubMenu items={[...list]} />
-                  </div>
-                )}
+                <Menu item={elem} />
               </Fragment>
             );
           } else {
@@ -60,13 +47,55 @@ const MobilePopup = ({ elements }: { elements: navItems[] }) => {
   );
 };
 
-const SubMenu = ({ items }: { items: menuItem[] }) => {
+const Menu = ({ item }: { item: navItems }) => {
+  const [list, setList] = useState([]);
+
   return (
     <>
+      <div
+        className="flex"
+        onClick={(e: BaseSyntheticEvent) => {
+          e.preventDefault();
+
+          if (list.length > 0) {
+            setList([]);
+          } else {
+            setList(item.item);
+          }
+        }}
+      >
+        {item.name}
+        {list.length > 0 ? (
+          <span className="transform translate-y-0.5 material-icons">
+            expand_less
+          </span>
+        ) : (
+          <span className="transform translate-y-0.5 material-icons">
+            expand_more
+          </span>
+        )}
+      </div>
+      {list.length > 0 && <SubMenu items={list} />}
+    </>
+  );
+};
+
+const SubMenu = ({ items }: { items: menuItem[] }) => {
+  const subRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    subRef.current.style.transition = 'all 2s';
+    subRef.current.style.maxHeight = '100vh';
+  }, []);
+
+  return (
+    <div
+      ref={subRef}
+      className="flex flex-col items-center w-full bg-gray-300 max-h-0 overflow-y-hidden"
+    >
       {items.map((i, idx) => (
         <div key={idx}>{i.h}</div>
       ))}
-    </>
+    </div>
   );
 };
 

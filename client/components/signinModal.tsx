@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, FocusEvent } from 'react';
 import { useStore } from '../store/user-context';
 import { signinRequest, signupRequest } from '../api/requests';
 import Input from './inputForm';
+import { iClose, iError } from './Icons';
 
 const SignUp = ({ close }: { close: () => void }) => {
   console.log('log in triggered');
@@ -31,54 +32,56 @@ const PopUp = ({ toggle }: { toggle: () => void }) => {
   const [logPref, setPref] = useState(true);
 
   return (
-    <div className="absolute top-0 left-0">
-      <div className="fixed z-50 h-1/2 w-1/3 p-3 bg-white rounded-lg border-2 transform translate-x-full translate-y-1/2">
-        <div className=" border-b-2">
-          <button className="absolute flex " onClick={() => toggle()}>
-            <span className="material-icons">close</span>
-          </button>
+    <div className="absolute top-0 left-0 ">
+      <div className="fixed flex justify-center z-50 w-full h-full">
+        <div className="mt-24  z-10 h-lg w-content p-3 bg-white rounded-lg border-2 ">
+          <div className=" border-b-2">
+            <button className="absolute flex " onClick={() => toggle()}>
+              {iClose}
+            </button>
 
-          <div className="flex justify-center">
-            <div className="flex mx-16 space-x-4">
-              <div
-                className="flex-col space-y-1 "
-                onClick={() => setPref(true)}
-              >
-                <button className="rounded-lg p-2 font-medium hover:bg-gray-200">
-                  LOG IN
-                </button>
+            <div className="flex justify-center">
+              <div className="flex mx-16 space-x-4">
+                <div
+                  className="flex-col space-y-1 "
+                  onClick={() => setPref(true)}
+                >
+                  <button className="rounded-lg p-2 font-medium hover:bg-gray-200">
+                    LOG IN
+                  </button>
 
-                <div className="flex justify-center w-full">
-                  {logPref && <Underline />}
+                  <div className="flex justify-center w-full">
+                    {logPref && <Underline />}
+                  </div>
                 </div>
-              </div>
-              <div
-                className="flex-col space-y-1 "
-                onClick={() => setPref(false)}
-              >
-                <button className="rounded-lg p-2 font-medium hover:bg-gray-200">
-                  SIGN UP
-                </button>
-                <div className="flex justify-center w-full">
-                  {!logPref && <Underline />}
+                <div
+                  className="flex-col space-y-1 "
+                  onClick={() => setPref(false)}
+                >
+                  <button className="rounded-lg p-2 font-medium hover:bg-gray-200">
+                    SIGN UP
+                  </button>
+                  <div className="flex justify-center w-full">
+                    {!logPref && <Underline />}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          {logPref ? <SignInForm /> : <SignUpForm />}
         </div>
-        {logPref ? <SignInForm /> : <SignUpForm />}
+        <style jsx>
+          {`
+            :global(body) {
+              overflow: hidden;
+            }
+          `}
+        </style>
+        <div
+          onClick={() => toggle()}
+          className="fixed bg-black h-screen opacity-50 w-screen"
+        ></div>
       </div>
-      <style jsx>
-        {`
-          :global(body) {
-            overflow: hidden;
-          }
-        `}
-      </style>
-      <div
-        onClick={() => toggle()}
-        className="fixed z-30 bg-black h-screen opacity-50 w-screen"
-      ></div>
     </div>
   );
 };
@@ -94,7 +97,7 @@ const SignInForm = () => {
     if ('error' in res) {
       setError(res.error);
     } else {
-      console.log('res', res);
+      window.location.reload();
     }
   };
 
@@ -102,36 +105,33 @@ const SignInForm = () => {
     <div className="relative">
       <div>
         <form className="flex flex-col space-y-4 p-4" onSubmit={signIn}>
-          <input
+          <Input
+            type="username"
             value={username}
             onChange={(e) => {
               if (e.currentTarget.value.length < 12) {
                 setUsername(e.currentTarget.value);
               }
             }}
-            className="w-full border-2 p-2 rounded focus:outline-none focus:ring focus:ring-blue-500 focus:border-transparent"
             placeholder="Username"
-          ></input>
-          <input
+          />
+          <Input
             value={password}
             onChange={(e) => {
               if (e.currentTarget.value.length < 20) {
                 setPassword(e.currentTarget.value);
               }
             }}
-            className="w-full border-2 p-2 rounded focus:outline-none focus:ring focus:ring-blue-500 focus:border-transparent"
             placeholder="Password"
             type="password"
-          ></input>
+          />
           <input
             type="submit"
             className="bottom-2 bg-blue-500 rounded text-white font-medium p-2 px-4"
             value="Log in"
           />
         </form>
-        <div className="absolute flex justify-center text-sm text-red-500 w-full">
-          {error}
-        </div>
+        <ErrorDisplay message={error} />
       </div>
     </div>
   );
@@ -161,7 +161,6 @@ const SignUpForm = () => {
 
     if ('error' in res) {
       setError(res.error);
-      console.log(res.error);
     } else {
       window.location.reload();
     }
@@ -171,24 +170,14 @@ const SignUpForm = () => {
     <>
       <form onSubmit={signUp}>
         {cont ? (
-          <div className="flex place-content-center p-4">
+          <div className=" p-4">
             <div className="flex flex-col space-y-4">
               <Input
-                placeholder="testing123"
+                placeholder="Email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.currentTarget.value)}
               />
-              {/* <input
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.currentTarget.value);
-                }}
-                className="w-full border-2 p-2 rounded focus:outline-none focus:ring focus:ring-blue-500 focus:border-transparent"
-                placeholder="Email"
-                type="email"
-              ></input> */}
-
               <button
                 className="bg-blue-500 rounded text-white font-medium p-2"
                 onClick={() => setCont(false)}
@@ -198,40 +187,38 @@ const SignUpForm = () => {
             </div>
           </div>
         ) : (
-          <div className="flex place-content-center p-4">
+          <div className=" p-4">
             <div className="flex flex-col space-y-4">
-              <input
+              <Input
+                type="username"
                 value={username}
                 onChange={(e) => {
-                  if (e.currentTarget.value.length < 9) {
+                  if (e.currentTarget.value.length < 12) {
                     setUsername(e.currentTarget.value);
                   }
                 }}
-                className="w-full border-2 p-2 rounded focus:outline-none focus:ring focus:ring-blue-500 focus:border-transparent"
                 placeholder="Username"
-              ></input>
-              <input
+              />
+              <Input
                 value={password}
                 onChange={(e) => {
                   if (e.currentTarget.value.length < 20) {
                     setPassword(e.currentTarget.value);
                   }
                 }}
-                className="w-full border-2 p-2 rounded focus:outline-none focus:ring focus:ring-blue-500 focus:border-transparent"
                 placeholder="Password"
                 type="password"
-              ></input>
-              <input
+              />
+              <Input
                 value={rePassword}
                 onChange={(e) => {
                   if (e.currentTarget.value.length < 20) {
                     setRePassword(e.currentTarget.value);
                   }
                 }}
-                className="w-full border-2 p-2 rounded focus:outline-none focus:ring focus:ring-blue-500 focus:border-transparent"
                 placeholder="Re-Enter Password"
                 type="password"
-              ></input>
+              />
               <div className="flex justify-between space-x-2">
                 <button
                   className="bg-blue-500 rounded text-white font-medium p-2 px-4"
@@ -242,13 +229,14 @@ const SignUpForm = () => {
                 <input
                   type="submit"
                   className="bg-blue-500 rounded text-white font-medium p-2 px-4 cursor-pointer"
-                  value="sign up"
+                  value="Sign Up"
                 />
               </div>
             </div>
           </div>
         )}
       </form>
+      <ErrorDisplay message={error} />
     </>
   );
 };
@@ -268,6 +256,21 @@ const Underline = () => {
       </svg>
     </>
   );
+};
+
+const ErrorDisplay = ({ message }: { message: string }) => {
+  if (message) {
+    return (
+      <div className="flex text-red-500 w-full p-4">
+        <div className="bg-yellow-500 p-3 rounded-l-xl">{iError}</div>
+        <span className="text-center p-2 font-semibold w-full border-t-2 border-r-2 border-b-2 rounded-r-xl">
+          {message}
+        </span>
+      </div>
+    );
+  } else {
+    return null;
+  }
 };
 
 export default SignUp;

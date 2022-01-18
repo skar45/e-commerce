@@ -12,6 +12,7 @@ import { iDown } from './Icons';
 
 type Select = {
   name: string;
+  icon?: JSX.Element;
   action: () => void;
 };
 
@@ -50,9 +51,11 @@ const reducer = (state: State, action: Action) => {
 const SelectMenu = ({
   title,
   options,
+  width,
 }: {
   title: string;
   options: Select[];
+  width?: string;
 }) => {
   const mainRef = useRef<HTMLDivElement>(null);
   const [boxState, dispatch] = useReducer<Reducer<State, Action>>(reducer, {
@@ -71,32 +74,32 @@ const SelectMenu = ({
   }, [boxState.selected]);
 
   return (
-    <div className="relative text-gray-600" ref={mainRef}>
+    <div className="relative text-gray-600 " ref={mainRef}>
       <button
-        className="flex justify-between border-2 w-24 bg-white px-2 py-1"
+        style={width && { width }}
+        className="flex justify-between w-full bg-white px-2 py-1"
         onClick={(e) => {
           e.preventDefault();
           dispatch({ type: ActionType.Open });
         }}
       >
-        <span>{boxState.selected.name}</span>
+        <span className="m-auto">{boxState.selected.name}</span>
         <i>{iDown}</i>
       </button>
 
       {boxState.open && (
-        <div className="absolute z-20 w-full flex flex-col justify-between bg-white border-2 shadow-lg">
+        <div className="absolute z-20 w-full flex flex-col items-center bg-white border-2 shadow-lg">
           {options.map((val, i) => {
             return (
               <button
-                className="hover:bg-purple-600 hover:text-white px-2 py-1"
+                className="flex gap-1 hover:bg-purple-600 hover:text-white px-2 py-1 w-full"
                 onClick={(e) => {
                   e.preventDefault();
                   dispatch({ type: ActionType.Select, data: val });
-                  console.log('action dispatched');
                 }}
                 key={i}
               >
-                {val.name}
+                {val.icon} {val.name}
               </button>
             );
           })}

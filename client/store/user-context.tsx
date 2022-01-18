@@ -5,6 +5,7 @@ import {
   useContext,
   Reducer,
   useEffect,
+  ReactNode,
 } from 'react';
 import { getUserRequest } from '../api/requests';
 import type { StoreType } from '../components/types';
@@ -111,7 +112,7 @@ const userData = async () => {
   return res;
 };
 
-const StoreProvider = ({ children }) => {
+const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [globalState, dispatch] = useReducer<Reducer<StoreType, Action>>(
     reducer,
     defaultState

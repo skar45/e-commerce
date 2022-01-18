@@ -3,7 +3,12 @@ import Carousel from '../../components/carouselSlides';
 import SelectMenu from '../../components/selectionMenu';
 import { addCartRequest, productsRequest } from '../../api/requests';
 import { InferGetStaticPropsType } from 'next';
-import { iAddCart } from '../../components/Icons';
+import {
+  iAddCart,
+  iFeatured,
+  iTrendDown,
+  iTrendUp,
+} from '../../components/Icons';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useStore } from '../../store/user-context';
@@ -23,22 +28,25 @@ const Shop = ({ products }: InferGetStaticPropsType<typeof getStaticProps>) => {
   );
 
   return (
-    <div className="pt-24 px-8">
+    <div className="pt-24 px-2 sm:px-8">
       <div className="flex justify-between pb-2">
-        <button>Link</button>
+        <button>Browse All</button>
         <div>
           <SelectMenu
+            width="140px"
             title="Sort"
             options={[
-              { name: 'Featured', action: () => {} },
+              { name: 'Featured', icon: iFeatured, action: () => {} },
               {
                 name: 'Price Up',
+                icon: iTrendUp,
                 action: () => {
                   setInventory([...memoPriceUp()]);
                 },
               },
               {
                 name: 'Price Down',
+                icon: iTrendDown,
                 action: () => {
                   setInventory([...memoPriceDown()]);
                 },
@@ -76,7 +84,7 @@ const Listing = ({
     });
   };
   return (
-    <div className="flex flex-wrap">
+    <div className="flex flex-wrap gap-2">
       {products.map((e, idx) => {
         return (
           <Fragment key={idx}>
@@ -93,7 +101,6 @@ const Card = ({ pImg, product }: { pImg: JSX.Element[]; product: Product }) => {
 
   const handleCart = async (e: MouseEvent, productId: number) => {
     e.preventDefault();
-    console.log('productId: ', productId);
     const response = await addCartRequest({ productId, amount: 1 });
     if ('error' in response) return;
     dispatch({ type: ActionTypes.updateCart, cart: response });
@@ -107,9 +114,13 @@ const Card = ({ pImg, product }: { pImg: JSX.Element[]; product: Product }) => {
       <div>
         <Carousel data={pImg} width={'300px'} />
       </div>
-      <Link href={`/shop/${product.id}`}>{product.title}</Link>
+      <span className="hover:underline">
+        <Link href={`/shop/${product.id}`}>{product.title}</Link>
+      </span>
       <div className="flex justify-between">
-        <div className="self-center">${product.price}</div>
+        <div className="self-center font-semibold text-green-800">
+          C ${product.price}
+        </div>
         <button
           className="bg-green-500 rounded-lg px-3 py-2"
           onClick={(e) => handleCart(e, product.id)}

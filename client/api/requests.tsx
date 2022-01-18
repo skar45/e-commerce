@@ -146,13 +146,13 @@ export const updateCartRequest = async (data: {
   // takes in productId
   // returns single updatedCart
 
-  if ('error' in response) {
+  if (response.error) {
     return response as Err;
   } else {
-    if ('id' in response) {
+    if (response.id) {
       return response as Cart;
     } else {
-      return parseCartCookie(response) as CartCookie;
+      return parseCartCookie(response);
     }
   }
 };
@@ -274,8 +274,15 @@ export const purchaseRequest = async (data: { cartItems: Cart[] }) => {
 };
 
 export const createPaymentRequest = async () => {
-  const response = await fetch('http://localhost:3001/api/create-payment').then(
-    (r) => r.json()
-  );
+  const response = await fetch('http://localhost:3001/api/create-payment', {
+    credentials: 'include',
+  }).then((r) => r.json());
   return response as { stripeSecret: string | null };
+};
+
+export const getCategoryRequest = async ({ type }: { type: string }) => {
+  const response = await fetch(`/api/items/category/${type}`).then((r) =>
+    r.json()
+  );
+  return response as ListProduct[];
 };
