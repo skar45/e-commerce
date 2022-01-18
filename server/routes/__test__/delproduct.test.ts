@@ -39,7 +39,7 @@ it("deletes item from the user's cart", async () => {
   const delCart = await request(app)
     .delete('/api/items/remove')
     .set('Cookie', [`id=${cookie}`])
-    .send({ productId: 2 })
+    .send({ cartId: addtoCart.body.id })
     .expect(200);
 
   expect(delCart).toBeDefined();

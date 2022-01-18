@@ -45,6 +45,7 @@ prisma.$use(async (params, next) => {
     } else {
       if (params.model === ('Product' || 'Purchased'))
         await redisClient.del('Product');
+      await redisClient.del('Product' + 'Category');
       await redisClient.hDel(
         'Product' + 'Items',
         str(
@@ -84,6 +85,11 @@ prisma.$use(async (params, next) => {
                 str(params.args.where.id)
               );
             }
+          } else if (params.args?.where?.category) {
+            cacheVal = await redisClient.hGet(
+              params.model + 'Category',
+              str(params.args.where.category)
+            );
           } else {
             cacheVal = await redisClient.get(params.model);
           }
@@ -128,6 +134,12 @@ prisma.$use(async (params, next) => {
                   str(result)
                 );
               }
+            } else if (params.args?.where?.category) {
+              await redisClient.hSet(
+                params.model + 'Category',
+                str(params.args.where.category),
+                str(result)
+              );
             } else {
               await redisClient.set(params.model, str(result));
             }

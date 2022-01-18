@@ -16,6 +16,7 @@ import { errorHandler } from './middlewares/errorhandler';
 import { findProductRouter } from './routes/findproduct';
 import { createPayment } from './routes/createpayment';
 import { stripeHook } from './routes/stripehook';
+import { categoryRouter } from './routes/category';
 
 //const cors = require('cors');
 const app = express();
@@ -59,6 +60,7 @@ app.use(delProductRouter);
 app.use(findProductRouter);
 app.use(createPayment);
 app.use(stripeHook);
+app.use(categoryRouter);
 
 app.use(errorHandler);
 

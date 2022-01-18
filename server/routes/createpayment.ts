@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import express, { Request, Response, NextFunction } from 'express';
 import Stripe from 'stripe';
 import prisma from '../lib/prisma';
@@ -10,7 +11,7 @@ const stripe = new Stripe(process.env.STRIPE_KEY!, {
 
 const router = express.Router();
 
-router.post(
+router.get(
   '/api/create-payment/',
   authenticate,
   async (req: Request, res: Response, next: NextFunction) => {
@@ -31,17 +32,18 @@ router.post(
         },
       },
     });
-    if (!items) return res.status(200).json(null);
 
+    if (!items) return res.status(200).json(null);
+    console.log(typeof items.ListItem[0].Product.price);
+    console.log(items);
     let total: number = 0;
-    items.ListItem.forEach(
-      (item) => (total += item.Product.price.toNumber() * 100 * item.amount)
-    );
+    total = items.ListItem.reduce((x, y) => {
+      return x + new Prisma.Decimal(y.Product.price).toNumber() * 100;
+    }, 0);
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: total,
       currency: 'cad',
-      customer: userId.toString(),
       automatic_payment_methods: {
         enabled: true,
       },

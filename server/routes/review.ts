@@ -19,7 +19,7 @@ router.post(
         description,
         title,
       },
-      select: {
+      include: {
         Product: {
           select: {
             title: true,
@@ -27,6 +27,7 @@ router.post(
         },
       },
     });
+
     return res.status(201).send(review);
   }
 );
