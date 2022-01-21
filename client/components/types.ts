@@ -1,16 +1,11 @@
-import { ReactElement } from 'react';
-
-export interface menuItem {
-  icon?: ReactElement;
-  h: string;
-  p: string;
-  link?: string;
+export interface MenuItem {
+  list: { name: string; link: string }[];
+  showcase: { name: string; link: string; img: string }[];
 }
 
-export interface navItems {
+export interface NavItems {
   name: string;
-  item?: menuItem[];
-  link?: string;
+  item: { link: string } | { menu: MenuItem };
 }
 
 export type Product = {
@@ -23,6 +18,8 @@ export type Product = {
   stock: number;
   img: string[];
 };
+
+export type ListProduct = Omit<Product, 'description'>;
 
 export type Cart = {
   id: number;

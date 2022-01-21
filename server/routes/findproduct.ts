@@ -28,7 +28,6 @@ router.get(
           },
         },
       });
-      console.log(list);
       if (list) {
         return res
           .status(200)

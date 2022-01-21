@@ -65,7 +65,7 @@ const SelectMenu = ({
   });
 
   useWindowEvent('mousedown', (e) => {
-    if (mainRef.current.contains(e.target)) return;
+    if (mainRef.current.contains(e.target as Element)) return;
     if (boxState.open) dispatch({ type: ActionType.Close });
   });
 

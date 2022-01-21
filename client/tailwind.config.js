@@ -3,6 +3,10 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      minWidth: {
+        '1/2': '50%',
+        '1/4': '25%',
+      },
       width: {
         's1/4': '25vw',
         's1/2': '50vw',
@@ -47,6 +51,7 @@ module.exports = {
       width: ['hover'],
     },
   },
+
   plugins: [],
   corePlugins: {
     translate: true,

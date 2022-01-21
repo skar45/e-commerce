@@ -85,10 +85,10 @@ prisma.$use(async (params, next) => {
                 str(params.args.where.id)
               );
             }
-          } else if (params.args?.where?.category) {
+          } else if (params.args?.where?.category || params.args?.where?.tags) {
             cacheVal = await redisClient.hGet(
               params.model + 'Category',
-              str(params.args.where.category)
+              str(params.args.where)
             );
           } else {
             cacheVal = await redisClient.get(params.model);
@@ -134,10 +134,14 @@ prisma.$use(async (params, next) => {
                   str(result)
                 );
               }
-            } else if (params.args?.where?.category) {
+            } else if (
+              params.args?.where?.category ||
+              params.args?.where?.tags
+            ) {
+              console.log(params.args);
               await redisClient.hSet(
                 params.model + 'Category',
-                str(params.args.where.category),
+                str(params.args.where),
                 str(result)
               );
             } else {

@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import { useEffect, useRef, useState, FocusEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useStore } from '../store/user-context';
 import { signinRequest, signupRequest } from '../api/requests';
 import Input from './inputForm';
@@ -242,19 +242,24 @@ const SignUpForm = () => {
 };
 
 const Underline = () => {
+  const lineRef = useRef<SVGSVGElement>(null);
+  const [width, setWidth] = useState(0);
+
+  useLayoutEffect(() => {
+    setWidth(lineRef.current.parentElement.clientWidth);
+  }, []);
+
   return (
-    <>
-      <svg height="3" width="40">
-        <line
-          x1="5"
-          x2="35"
-          style={{ stroke: 'rgb(255,0,0)', strokeWidth: '5' }}
-        >
-          <animate attributeName="x2" from="20" to="35" dur="0.25" />
-          <animate attributeName="x1" from="20" to="5" dur="0.25" />
-        </line>
-      </svg>
-    </>
+    <svg height="3" width={width} ref={lineRef}>
+      <line
+        x1="0"
+        x2={width}
+        style={{ stroke: 'rgb(255,0,0)', strokeWidth: '5' }}
+      >
+        <animate attributeName="x2" from={width / 2} to={width} dur="0.12" />
+        <animate attributeName="x1" from={width / 2} to="0" dur="0.12" />
+      </line>
+    </svg>
   );
 };
 

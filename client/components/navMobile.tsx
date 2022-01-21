@@ -1,3 +1,5 @@
+import router from 'next/router';
+import Link from 'next/link';
 import {
   BaseSyntheticEvent,
   useState,
@@ -5,9 +7,49 @@ import {
   useRef,
   useEffect,
 } from 'react';
-import { navItems, menuItem } from './types';
+import { useWindowEvent } from '../hooks/use-window-event';
+import { iClose, iMenu } from './Icons';
+import { NavItems, MenuItem } from './types';
+import SignUp from './signinModal';
 
-const MobilePopup = ({ elements }: { elements: navItems[] }) => {
+const ResponsiveMenu = ({ items }: { items: NavItems[] }) => {
+  const [toggle, setToggle] = useState(false);
+  const [login, setLogin] = useState(false);
+  const mainRef = useRef<HTMLDivElement>(null);
+
+  useWindowEvent('click', (e) => {
+    if (mainRef.current.contains(e.target as Element)) return;
+    setToggle(false);
+  });
+
+  return (
+    <div className="flex content-center sm:hidden" ref={mainRef}>
+      <button className="" onClick={() => setToggle(!toggle)}>
+        {toggle ? <i>{iClose}</i> : <i>{iMenu}</i>}
+      </button>
+      <div className="sm:hidden">
+        {toggle && (
+          <MobilePopup
+            elements={items}
+            close={() => setToggle(false)}
+            loginModal={() => setLogin(true)}
+          />
+        )}
+        {login && <SignUp close={() => setLogin(false)} />}
+      </div>
+    </div>
+  );
+};
+
+const MobilePopup = ({
+  elements,
+  close,
+  loginModal,
+}: {
+  elements: NavItems[];
+  close: () => void;
+  loginModal: () => void;
+}) => {
   const mainRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,24 +63,31 @@ const MobilePopup = ({ elements }: { elements: navItems[] }) => {
       className="absolute mt-10 w-screen ml-4 border-2 bg-white transform -translate-x-full max-h-0 overflow-y-hidden"
     >
       <div className="flex flex-col items-center space-y-2 p-4">
-        <div>Cart</div>
+        <Link href="/cart">Cart</Link>
 
         {elements.map((elem, idx) => {
-          if (elem.item) {
+          if ('menu' in elem.item) {
             return (
               <Fragment key={idx}>
-                <Menu item={elem} />
+                <Menu item={elem.item.menu} name={elem.name} close={close} />
               </Fragment>
             );
           } else {
+            const { link } = elem.item;
             return (
-              <div key={idx} onClick={() => {}}>
-                {elem.name}
+              <div key={idx} onClick={() => close()}>
+                <Link href={`/${link}`}>{elem.name}</Link>
               </div>
             );
           }
         })}
-        <div className="flex flex-rows w-full ">
+        <div
+          className="flex flex-rows w-full"
+          onClick={() => {
+            console.log('trig');
+            loginModal();
+          }}
+        >
           <div className="w-1/2 text-center">Sign Up</div>
           <div className="w-1/2 text-center">Sign In</div>
         </div>
@@ -47,8 +96,16 @@ const MobilePopup = ({ elements }: { elements: navItems[] }) => {
   );
 };
 
-const Menu = ({ item }: { item: navItems }) => {
-  const [list, setList] = useState([]);
+const Menu = ({
+  item,
+  name,
+  close,
+}: {
+  item: MenuItem;
+  name: string;
+  close: () => void;
+}) => {
+  const [list, setList] = useState<MenuItem['list'] | MenuItem['showcase']>([]);
 
   return (
     <>
@@ -60,27 +117,29 @@ const Menu = ({ item }: { item: navItems }) => {
           if (list.length > 0) {
             setList([]);
           } else {
-            setList(item.item);
+            setList(item.list.concat(item.showcase));
           }
         }}
       >
-        {item.name}
+        {name}
         {list.length > 0 ? (
-          <span className="transform translate-y-0.5 material-icons">
-            expand_less
-          </span>
+          <span className="material-icons">expand_less</span>
         ) : (
-          <span className="transform translate-y-0.5 material-icons">
-            expand_more
-          </span>
+          <span className="material-icons">expand_more</span>
         )}
       </div>
-      {list.length > 0 && <SubMenu items={list} />}
+      {list.length > 0 && <SubMenu items={list} close={close} />}
     </>
   );
 };
 
-const SubMenu = ({ items }: { items: menuItem[] }) => {
+const SubMenu = ({
+  items,
+  close,
+}: {
+  items: { name: string; link: string; img?: string }[];
+  close: () => void;
+}) => {
   const subRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     subRef.current.style.transition = 'all 2s';
@@ -90,13 +149,15 @@ const SubMenu = ({ items }: { items: menuItem[] }) => {
   return (
     <div
       ref={subRef}
-      className="flex flex-col items-center w-full bg-gray-300 max-h-0 overflow-y-hidden"
+      className="flex flex-col items-center w-full gap-2 py-2 bg-gray-300 max-h-0 overflow-y-hidden"
     >
-      {items.map((i, idx) => (
-        <div key={idx}>{i.h}</div>
+      {items.map((l, i) => (
+        <div key={i} onClick={() => close()}>
+          <Link href={`/${l.link}`}>{l.name}</Link>
+        </div>
       ))}
     </div>
   );
 };
 
-export default MobilePopup;
+export default ResponsiveMenu;

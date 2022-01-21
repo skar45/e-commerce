@@ -7,12 +7,8 @@ const Home: NextPage = () => {
   const vidRef = useRef<HTMLVideoElement>(null);
 
   return (
-    <div className="relative h-screen">
-      {/* <div
-        style={{ backgroundImage: `url(${main.src})` }}
-        className="h-screen pt-24 bg-cover"
-      ></div> */}
-      <div className="flex flex-col h-full">
+    <div className="relative">
+      <div className="flex flex-col h-screen">
         <div className="max-w-full">
           <video
             className="absolute object-cover h-screen w-screen"
@@ -41,7 +37,7 @@ const Home: NextPage = () => {
         </section>
       </div>
 
-      <div className="h-screen p-4 sm:p-20  my-auto" id="items">
+      <div className="p-4 sm:p-20  my-auto" id="items">
         <h3 className="text-xl font-semibold mb-2">Shop Our Product Line: </h3>
         <section className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           <Card title="Men's Wear" link="" img="main.jpg" />
@@ -65,7 +61,7 @@ const Card = ({
   return (
     <div
       style={{ backgroundImage: `url(${main.src})`, height: '600px' }}
-      className="relative bg-cover p-12"
+      className="bg-cover p-12"
     >
       <div className="flex flex-col place-content-end gap-2 h-full">
         <h3 className="font-bold text-xl text-white">{title}</h3>

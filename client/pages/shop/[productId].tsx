@@ -28,23 +28,22 @@ type Product = InferGetStaticPropsType<typeof getStaticProps>;
 const ProductShow = ({ product }: Product) => {
   const imgSlides = product.img.map((img, i) => {
     return (
-      <div key={i}>
-        <Image src={`/${img}`} width="500" height="500" />
+      <div key={i} className="w-full">
+        <img src={`/${img}`} height="full" width="full" />
       </div>
     );
   });
 
   return (
     <div className=" pt-24 px-4 sm:px-12 flex flex-col space-x-2">
-      <div className=" flex flex-col md:flex-row sm:w-3/4 overflow-hidden">
-        <div
-          className="self-center sm:self-auto p-2"
-          style={{ width: '416px' }}
-        >
-          <Carousel data={imgSlides} width={'400'} />
+      <div className=" flex flex-col md:flex-row sm:w-3/4 overflow-hidden min-h-screen">
+        <div className="max-w-sm sm:min-w-1/2">
+          <div className="flex self-center sm:self-auto p-2 ">
+            <Carousel data={imgSlides} />
+          </div>
         </div>
 
-        <p className="py-4">{product.description}</p>
+        <p className="py-4 px-2 max-w-lg">{product.description}</p>
       </div>
       <ProductCard product={product} />
 
@@ -85,10 +84,6 @@ const ProductCard = ({ product }: Product) => {
     <div className="sm:absolute right-5  sm:w-1/4 h-3/4">
       <div className="sticky top-24 flex flex-col gap-1 py-4">
         <div className="text-xl">{product.title}</div>
-        {/* <div className="flex">
-          <div></div>
-          <div>Rating</div>
-        </div> */}
         <hr />
         <div className="text-right">${product.price}</div>
         <div>STOCK: {product.stock}</div>
@@ -204,7 +199,7 @@ const ReviewRatings = ({ ratings }: { ratings: { [x: number]: number } }) => {
       {[5, 4, 3, 2, 1].map((r, i) => {
         return (
           <div key={i} className="flex items-center gap-2">
-            <span>{r} stars</span>
+            <span>{r}</span>
             <div className="w-24 rounded-full h-2 bg-blue-200 ">
               <div
                 style={{

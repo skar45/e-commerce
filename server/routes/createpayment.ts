@@ -34,8 +34,7 @@ router.get(
     });
 
     if (!items) return res.status(200).json(null);
-    console.log(typeof items.ListItem[0].Product.price);
-    console.log(items);
+
     let total: number = 0;
     total = items.ListItem.reduce((x, y) => {
       return x + new Prisma.Decimal(y.Product.price).toNumber() * 100;

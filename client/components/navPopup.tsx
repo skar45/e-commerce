@@ -1,30 +1,76 @@
-import { menuItem } from './types';
+import { useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import Image from 'next/image';
+import { MenuItem, NavItems } from './types';
 
-const NavPopup = ({ menuData }: { menuData: menuItem[] }) => {
+const NavLink = ({ navmenu }: { navmenu: NavItems }) => {
+  const router = useRouter();
+
+  if ('link' in navmenu.item) {
+    const { link } = navmenu.item;
+    return (
+      <button type="button">
+        <span
+          className="hover:text-gray-500"
+          onClick={() => router.push(`/${link}`)}
+        >
+          {navmenu.name}
+        </span>
+      </button>
+    );
+  }
+
+  const [isOpen, setOpen] = useState(false);
+
   return (
-    <div className="absolute hidden mt-2 w-max max-w-m transform -translate-x-1/2 sm:flex text-black">
-      <div className="grid grid-cols-2 gap-2 rounded-lg shadow-lg ring-1 ring-black p-4 ring-opacity-25 bg-white">
-        {menuData.map((item: menuItem, idx: number) => {
+    <div
+      className=""
+      onMouseOver={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button type="button">
+        <span className="hover:text-gray-500">{navmenu.name}</span>
+      </button>
+      {isOpen && <Menu menuData={navmenu.item.menu} title={navmenu.name} />}
+    </div>
+  );
+};
+
+const Menu = ({ menuData, title }: { menuData: MenuItem; title: string }) => {
+  const router = useRouter();
+
+  return (
+    <div className="absolute flex w-screen p-4 gap-2 bg-white  left-0">
+      <ol className="flex flex-col pl-8 py-4 gap-2 w-1/3">
+        <li>{title}</li>
+        {menuData.list.map((m, i) => {
+          return (
+            <li key={i}>
+              <span
+                className="hover:text-gray-300 cursor-pointer"
+                onClick={() => router.push(`/${m.link}`)}
+              >
+                {m.name}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+      <div className="flex gap-4 p-2">
+        {menuData.showcase.map((m, i) => {
           return (
             <div
-              className="flex gap-4 hover:bg-gray-200 p-4 rounded"
-              key={idx}
-              onClick={(e) => {
-                e.preventDefault;
-                console.log('hi');
-              }}
+              key={i}
+              className="flex flex-col hover:text-gray-300 cursor-pointer"
+              onClick={() => router.push(`/${m.link}`)}
             >
-              <div className="justify-self-end">
-                <div className="ml-left-4 bg-blue-500 w-10 h-10 rounded p-2">
-                  {item.icon}
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <p className="text-left font-bold">{item.h}</p>
-                <p className="text-left text-opacity-50 overflow-clip">
-                  {item.p}
-                </p>
-              </div>
+              <Image
+                src={`/${m.img}`}
+                height={710}
+                width={660}
+                layout="intrinsic"
+              />
+              <span>{m.name}</span>
             </div>
           );
         })}
@@ -33,4 +79,4 @@ const NavPopup = ({ menuData }: { menuData: menuItem[] }) => {
   );
 };
 
-export default NavPopup;
+export default NavLink;

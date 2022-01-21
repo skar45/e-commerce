@@ -67,18 +67,28 @@ const Card = ({
 
   return (
     <div className="absolute top-0 left-0">
-      <div
-        className="fixed z-50 h-screen w-0 p-6 bg-white overflow-x-hidden"
-        ref={mainRef}
-      >
-        <form onSubmit={handleSubmit}>
-          <div ref={payRef} className="my-6" />
-          <input
-            type="submit"
-            value="Pay Now"
-            className="cursor-pointer px-3 py-2 w-full text-white bg-blue-500 rounded-md font-bold"
-          />
-        </form>
+      <div className="fixed flex items-end z-50 h-screen w-full">
+        <div
+          className="h-screen w-0 p-6 bg-white overflow-x-hidden z-10"
+          ref={mainRef}
+        >
+          <form onSubmit={handleSubmit}>
+            <div ref={payRef} className="my-6" />
+            <input
+              type="submit"
+              value="Pay Now"
+              className="cursor-pointer px-3 py-2 w-full text-white bg-blue-500 rounded-md font-bold"
+            />
+          </form>
+        </div>
+        <style jsx>
+          {`
+            :global(body) {
+              overflow: hidden;
+            }
+          `}
+        </style>
+        <div className="fixed bg-black opacity-50 w-screen h-screen"></div>
       </div>
     </div>
   );

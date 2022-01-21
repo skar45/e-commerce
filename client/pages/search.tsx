@@ -5,6 +5,7 @@ import SelectMenu from '../components/selectionMenu';
 import { JsxElement } from 'typescript';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { productsRequest } from '../api/requests';
+import Listing from '../components/listing';
 
 type Products = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -15,6 +16,8 @@ const Search = ({ products }: Products) => {
     let results = items;
 
     terms.forEach((param) => {
+      param.toLowerCase();
+      param.trim();
       const title = results.filter((p) => {
         return (
           p.title.toLowerCase().split('').includes(param) ||
@@ -49,67 +52,10 @@ const Search = ({ products }: Products) => {
         className="w-full md:w-3/4 p-2 rounded focus:outline-none ring-2 focus:ring-blue-600"
       />
       {getResults.length > 0 ? (
-        <Layout items={getResults} query={query} />
+        <Listing products={getResults} />
       ) : (
         <div className="mt-32">0 results for "{query}"</div>
       )}
-    </div>
-  );
-};
-
-const Layout = ({
-  items,
-  query,
-}: {
-  items: Products['products'];
-  query: string;
-}) => {
-  const slides = items.map((v) => {
-    return v.img.map((image) => {
-      return (
-        <div>
-          <img src={image} width="300" height="400"></img>
-        </div>
-      );
-    });
-  });
-
-  return (
-    <div>
-      <div className="flex justify-between pb-2">
-        <div>
-          {items.length} results for "{query}"
-        </div>
-        <div>
-          <SelectMenu
-            title="sort"
-            options={[
-              { name: 'Featured', action: () => {} },
-              { name: 'Price Up', action: () => {} },
-              { name: 'Price Down', action: () => {} },
-            ]}
-          ></SelectMenu>
-        </div>
-      </div>
-      <div className="grid grid-cols-3 gap-1">
-        {slides.map((e, idx) => {
-          return (
-            <Fragment key={idx}>
-              <Card data={e} />
-            </Fragment>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
-const Card = ({ data }: { data: JSX.Element[] }) => {
-  return (
-    <div className=" flex flex-col items-center bg-gray-200 m-auto w-full p-2 overflow-hidden">
-      <Carousel data={data} width={'200px'} />
-      <div>Title</div>
-      <div>Things</div>
     </div>
   );
 };

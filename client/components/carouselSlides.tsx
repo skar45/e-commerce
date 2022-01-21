@@ -1,4 +1,5 @@
 import { JsxElement } from 'typescript';
+import { DetailedHTMLProps, DOMAttributes } from 'react';
 import {
   Fragment,
   useEffect,
@@ -35,20 +36,19 @@ const reducer = (state: Slides, action: Action) => {
   }
 };
 
-const Carousel = ({ data, width }) => {
+const Carousel = ({ data }: { data: JSX.Element[] }) => {
   const [controlState, dispatch] = useReducer<Reducer<Slides, Action>>(
     reducer,
     new Slides(data)
   );
   const sliderRef = useRef<HTMLDivElement>(null);
-  const [frame, setFrame] = useState<JsxElement[]>([]);
+  const [frame, setFrame] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
     dispatch({ type: ActionTypes.set, data: new Slides(data) });
     setFrame(controlState.showSlide());
   }, [data]);
 
-  const sWidth = parseInt(width);
   let touch: number = null;
   let final: number = 0;
   let translate: number = 0;
@@ -65,20 +65,22 @@ const Carousel = ({ data, width }) => {
   };
 
   const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
+    const { clientWidth } = e.target as Element;
+    console.log(clientWidth);
     final = translate;
-    if (Math.abs(final) > parseInt(width) / 3) {
+    if (Math.abs(final) > clientWidth / 3) {
       if (final > 0) {
-        animateSlide('left');
+        animateSlide('left', clientWidth);
       } else {
-        animateSlide('right');
+        animateSlide('right', clientWidth);
       }
     } else {
-      animateSlide('center');
+      animateSlide('center', null);
       final = 0;
     }
   };
 
-  const animateSlide = (dir: 'left' | 'right' | 'center', w = sWidth) => {
+  const animateSlide = (dir: 'left' | 'right' | 'center', w) => {
     const slideElem = sliderRef.current.style;
     switch (dir) {
       case 'left':
@@ -115,16 +117,18 @@ const Carousel = ({ data, width }) => {
     <div className="relative overflow-hidden">
       <button
         className="absolute z-10 left-0 h-full w-1/5"
-        onClick={() => {
-          animateSlide('left');
+        onClick={(e) => {
+          const { clientWidth } = sliderRef.current.children[0];
+          animateSlide('left', clientWidth);
         }}
       >
         <div className="flex place-content-center">{iNavPrev}</div>
       </button>
       <button
         className=" absolute right-0 z-10 h-full w-1/5"
-        onClick={() => {
-          animateSlide('right');
+        onClick={(e) => {
+          const { clientWidth } = sliderRef.current.children[0];
+          animateSlide('right', clientWidth);
         }}
       >
         <div className="flex place-content-center">{iNavNext}</div>
@@ -134,7 +138,7 @@ const Carousel = ({ data, width }) => {
         onTouchEnd={handleTouchEnd}
         onTouchMove={handleTouchMove}
         ref={sliderRef}
-        style={{ width: `${sWidth * 3}px`, right: `${sWidth}px` }}
+        style={{ width: `300%`, right: `100%` }}
         className="relative flex justify-center"
       >
         {controlState.showSlide().map((e, i) => {
@@ -146,7 +150,7 @@ const Carousel = ({ data, width }) => {
 };
 
 class Node {
-  public val: JsxElement;
+  public val: JSX.Element;
   public next: Node = null;
   public prev: Node = null;
   constructor(val) {
@@ -158,7 +162,7 @@ class Slides {
   public head: Node = null;
   public tail: Node = null;
   public length: number = 0;
-  constructor(items: JsxElement[]) {
+  constructor(items: JSX.Element[]) {
     items.forEach((item, idx) => {
       this.push(item);
       if (idx === items.length - 1) {

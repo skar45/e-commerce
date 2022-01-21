@@ -156,7 +156,10 @@ const CheckOutCard = ({ items }: { items: StoreType['data']['items'] }) => {
 };
 
 const ShoppingCart = ({ items }: { items: StoreType['data']['items'] }) => {
-  console.log(items);
+  if (items.length === 0) {
+    return <Custom404 message="You have 0 items in your Cart." />;
+  }
+
   return (
     <ol className="flex flex-col border-b-2 w-full">
       {items.map((p, i) => {
@@ -171,7 +174,6 @@ const ShoppingCart = ({ items }: { items: StoreType['data']['items'] }) => {
 };
 
 const CartCard = ({ item }: { item: StoreType['data']['items'][number] }) => {
-  console.log(item);
   const [, dispatch] = useStore();
 
   const deleteItem = async () => {
@@ -242,6 +244,10 @@ const WishList = ({ items }: { items: StoreType['data']['wishlist'] }) => {
     dispatch({ type: ActionTypes.delWish, wish: response });
   };
 
+  if (items.length === 0) {
+    return <Custom404 message="You have 0 items in your Wish List" />;
+  }
+
   return (
     <ol className="flex flex-wrap gap-2 p-2 w-full">
       {items.map((w) => {
@@ -281,6 +287,10 @@ const Reviews = ({
   items: StoreType['data']['reviews'];
   user: string;
 }) => {
+  if (items.length === 0) {
+    return <Custom404 message="You have 0 Reviews" />;
+  }
+
   return (
     <ol className="flex flex-col p-3 w-full">
       {items.map((p, i) => {
@@ -291,6 +301,14 @@ const Reviews = ({
         );
       })}
     </ol>
+  );
+};
+
+const Custom404 = ({ message }: { message: string }) => {
+  return (
+    <div className="p-4 flex justify-center h-full w-full">
+      <span className="text-center">{message}</span>
+    </div>
   );
 };
 
@@ -307,14 +325,14 @@ const Underline = ({ dim }: { dim: animateTab }) => {
             attributeName="x2"
             from={dim.initialX2}
             to={dim.x2}
-            dur="0.25"
+            dur="0.12"
           />
 
           <animate
             attributeName="x1"
             from={dim.initialX1}
             to={dim.x1}
-            dur="0.25"
+            dur="0.12"
           />
         </line>
       </svg>

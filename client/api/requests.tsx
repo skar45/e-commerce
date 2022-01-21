@@ -7,6 +7,7 @@ import {
   Cart,
   CartCookie,
   StoreType,
+  ListProduct,
 } from '../components/types';
 
 type Err = {
@@ -19,7 +20,6 @@ type CurrentUserresponse =
     } & { WishList: WishList[] })
   | { ListItem: CartCookie };
 
-type ListProduct = Omit<Product, 'description'>;
 type ParsedCart = StoreType['data']['items'][number];
 
 export const signinRequest = async (data: {
@@ -280,9 +280,17 @@ export const createPaymentRequest = async () => {
   return response as { stripeSecret: string | null };
 };
 
-export const getCategoryRequest = async ({ type }: { type: string }) => {
-  const response = await fetch(`/api/items/category/${type}`).then((r) =>
-    r.json()
-  );
+export const getCategoryRequest = async (category?: string, tag?: string) => {
+  if (!category && !tag) return [];
+
+  const params =
+    category && tag
+      ? new URLSearchParams({ category, tag })
+      : new URLSearchParams(category ? { category } : { tag });
+  console.log(params);
+
+  const response = await fetch(
+    `http://localhost:3001/api/items/category?${params.toString()}`
+  ).then((r) => r.json());
   return response as ListProduct[];
 };
