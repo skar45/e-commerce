@@ -41,7 +41,7 @@ const NavBar = () => {
             {
               name: 'Casual Wear',
               link: 'category?category=women&tag=casual',
-              img: 'w_c.jpg',
+              img: 'w_c4.jpg',
             },
             {
               name: 'Accessories',
@@ -117,18 +117,13 @@ const NavBar = () => {
               </button>
             ) : (
               <div
-                className="flex items-center"
+                className="text-center p-2 bg-gray-200 rounded-lg"
                 onClick={async () => {
                   await signoutRequest();
                   window.location.reload();
                 }}
               >
-                <div className={`rounded-full  bg-red-500 text-white p-1`}>
-                  {user[0]}
-                </div>
-                <span className="font-light text-gray-500 text-sm ml-1">
-                  {user}
-                </span>
+                <span className="">{user}</span>
               </div>
             )}
 

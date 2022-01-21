@@ -11,6 +11,8 @@ import { useWindowEvent } from '../hooks/use-window-event';
 import { iClose, iMenu } from './Icons';
 import { NavItems, MenuItem } from './types';
 import SignUp from './signinModal';
+import { useStore } from '../store/user-context';
+import { signoutRequest } from '../api/requests';
 
 const ResponsiveMenu = ({ items }: { items: NavItems[] }) => {
   const [toggle, setToggle] = useState(false);
@@ -51,6 +53,7 @@ const MobilePopup = ({
   loginModal: () => void;
 }) => {
   const mainRef = useRef<HTMLDivElement>(null);
+  const [{ username }] = useStore();
 
   useEffect(() => {
     mainRef.current.style.transition = 'all 2s';
@@ -60,7 +63,7 @@ const MobilePopup = ({
   return (
     <div
       ref={mainRef}
-      className="absolute mt-10 w-screen ml-4 border-2 bg-white transform -translate-x-full max-h-0 overflow-y-hidden"
+      className="absolute mt-10 w-screen ml-4 border-2 bg-white transform -translate-x-full max-h-0 overflow-y-hidden shadow-md"
     >
       <div className="flex flex-col items-center space-y-2 p-4">
         <Link href="/cart">Cart</Link>
@@ -81,16 +84,27 @@ const MobilePopup = ({
             );
           }
         })}
-        <div
-          className="flex flex-rows w-full"
-          onClick={() => {
-            console.log('trig');
-            loginModal();
-          }}
-        >
-          <div className="w-1/2 text-center">Sign Up</div>
-          <div className="w-1/2 text-center">Sign In</div>
-        </div>
+        {username ? (
+          <div
+            className="text-center w-full p-2 bg-gray-200 rounded-lg"
+            onClick={async () => {
+              await signoutRequest();
+              window.location.reload();
+            }}
+          >
+            Sign out from {username}
+          </div>
+        ) : (
+          <div
+            className="flex flex-rows w-full"
+            onClick={() => {
+              loginModal();
+            }}
+          >
+            <div className="w-1/2 text-center">Sign Up</div>
+            <div className="w-1/2 text-center">Sign In</div>
+          </div>
+        )}
       </div>
     </div>
   );

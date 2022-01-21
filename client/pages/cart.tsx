@@ -14,6 +14,7 @@ import {
   updateCartRequest,
 } from '../api/requests';
 import PaymentModal from '../components/paymentModal';
+import ErrorDisplay from '../components/errorDisplay';
 
 enum activeTab {
   Cart = 'cart',
@@ -113,11 +114,18 @@ const Cart = () => {
 
 const CheckOutCard = ({ items }: { items: StoreType['data']['items'] }) => {
   const [clientId, setClientId] = useState<{ stripeSecret: string }>(null);
+  const [error, setError] = useState<string>(null);
+  const [pay, setPay] = useState(false);
   let total = 0;
 
   const handleCheckout = async () => {
     const response = await createPaymentRequest();
+    if ('error' in response) {
+      setError(response.error);
+      return;
+    }
     setClientId(response);
+    setPay(true);
     console.log('stripe res: ', response);
   };
 
@@ -149,8 +157,17 @@ const CheckOutCard = ({ items }: { items: StoreType['data']['items'] }) => {
         >
           CHECKOUT
         </button>
-        {clientId && <PaymentModal clientSecret={clientId.stripeSecret} />}
+        {pay && (
+          <PaymentModal
+            clientSecret={clientId.stripeSecret}
+            cart={items}
+            close={(e) => {
+              setPay(false);
+            }}
+          />
+        )}
       </div>
+      {error && <ErrorDisplay message={error} close={() => setError(null)} />}
     </div>
   );
 };

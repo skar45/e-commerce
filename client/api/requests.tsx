@@ -277,7 +277,7 @@ export const createPaymentRequest = async () => {
   const response = await fetch('http://localhost:3001/api/create-payment', {
     credentials: 'include',
   }).then((r) => r.json());
-  return response as { stripeSecret: string | null };
+  return response as { stripeSecret: string } | Err;
 };
 
 export const getCategoryRequest = async (category?: string, tag?: string) => {

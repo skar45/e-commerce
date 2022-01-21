@@ -37,11 +37,19 @@ const Home: NextPage = () => {
         </section>
       </div>
 
-      <div className="p-4 sm:p-20  my-auto" id="items">
+      <div className="px-4 py-20 sm:p-20  my-auto" id="items">
         <h3 className="text-xl font-semibold mb-2">Shop Our Product Line: </h3>
         <section className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          <Card title="Men's Wear" link="" img="main.jpg" />
-          <Card title="Women's Wear" link="" img="F1.jpg" />
+          <Card
+            title="Men's Wear"
+            link="category?category=men"
+            img="main.jpg"
+          />
+          <Card
+            title="Women's Wear"
+            link="category?category=women"
+            img="F1.jpg"
+          />
         </section>
       </div>
     </div>

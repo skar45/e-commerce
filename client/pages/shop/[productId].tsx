@@ -22,6 +22,7 @@ import Carousel from '../../components/carouselSlides';
 import { ReviewCard } from '../../components/reviewCard';
 import { useStore } from '../../store/user-context';
 import { ActionTypes, Review } from '../../components/types';
+import ErrorDisplay from '../../components/errorDisplay';
 
 type Product = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -57,10 +58,14 @@ const ProductShow = ({ product }: Product) => {
 const ProductCard = ({ product }: Product) => {
   const [globalState, dispatch] = useStore();
   const [wishlist, setWish] = useState(product.WishList);
-  console.log('g state: ', globalState);
+  const [error, setError] = useState<string>(null);
+
   const addToCart = async () => {
     const response = await addCartRequest({ productId: product.id, amount: 1 });
-    if ('error' in response) return;
+    if ('error' in response) {
+      setError(response.error);
+      return;
+    }
     dispatch({ type: ActionTypes.updateCart, cart: response });
   };
 
@@ -70,12 +75,18 @@ const ProductCard = ({ product }: Product) => {
     )[0];
     if (wishList) {
       const response = await delWishlistRequest({ wishListId: wishList.id });
-      if ('error' in response) return;
+      if ('error' in response) {
+        setError(response.error);
+        return;
+      }
       setWish(wishlist - 1);
       dispatch({ type: ActionTypes.delWish, wish: response });
     } else {
       const response = await wishlistRequest({ productId: product.id });
-      if ('error' in response) return;
+      if ('error' in response) {
+        setError(response.error);
+        return;
+      }
       setWish(wishlist + 1);
       dispatch({ type: ActionTypes.wishlist, wish: response });
     }
@@ -112,6 +123,7 @@ const ProductCard = ({ product }: Product) => {
           {wishlist}
         </div>
       </div>
+      {error && <ErrorDisplay message={error} close={() => setError(null)} />}
     </div>
   );
 };
@@ -228,7 +240,8 @@ const ReviewForm = ({
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
   const [rating, setRating] = useState<number>(1);
-  console.log('rating set: ', rating);
+  const [error, setError] = useState<string>(null);
+
   useEffect(() => {
     formRef.current.style.transition = 'all 1s';
     formRef.current.style.height = '220px';
@@ -241,7 +254,10 @@ const ReviewForm = ({
       description: desc,
       productId,
     });
-    if ('error' in response) return;
+    if ('error' in response) {
+      setError(response.error);
+      return;
+    }
     dispatch({ type: ActionTypes.review, review: response });
     sendReview(response);
   };
@@ -282,6 +298,7 @@ const ReviewForm = ({
           value="Submit"
         />
       </form>
+      {error && <ErrorDisplay message={error} close={() => setError(null)} />}
     </div>
   );
 };

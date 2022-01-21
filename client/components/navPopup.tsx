@@ -40,7 +40,7 @@ const Menu = ({ menuData, title }: { menuData: MenuItem; title: string }) => {
   const router = useRouter();
 
   return (
-    <div className="absolute flex w-screen p-4 gap-2 bg-white  left-0">
+    <div className="absolute flex w-screen p-4 border-b-2 shadow-2xl gap-2 bg-white left-0">
       <ol className="flex flex-col pl-8 py-4 gap-2 w-1/3">
         <li>{title}</li>
         {menuData.list.map((m, i) => {
