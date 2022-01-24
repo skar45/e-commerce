@@ -26,7 +26,7 @@ export const signinRequest = async (data: {
   username: string;
   password: string;
 }) => {
-  const response = await fetch('http://localhost:3001/api/user/signin', {
+  const response = await fetch(useRequest() + '/api/user/signin', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -45,7 +45,7 @@ export const signupRequest = async (data: {
   password: string;
   email: string;
 }) => {
-  const response = await fetch('http://localhost:3001/api/user/signup', {
+  const response = await fetch(useRequest() + '/api/user/signup', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -60,7 +60,7 @@ export const signupRequest = async (data: {
 };
 
 export const signoutRequest = async () => {
-  const response = await fetch('http://localhost:3001/api/user/signout', {
+  const response = await fetch(useRequest() + '/api/user/signout', {
     method: 'GET',
     credentials: 'include',
   }).then((r) => r.json());
@@ -69,7 +69,7 @@ export const signoutRequest = async () => {
 };
 
 export const getUserRequest = async () => {
-  const response = await fetch('http://localhost:3001/api/user/currentuser', {
+  const response = await fetch(useRequest() + '/api/user/currentuser', {
     method: 'GET',
     credentials: 'include',
   }).then((r) => r.json());
@@ -98,7 +98,7 @@ export const addCartRequest = async (data: {
   productId: number;
   amount: number;
 }) => {
-  const response = await fetch('http://localhost:3001/api/items/add', {
+  const response = await fetch(useRequest() + '/api/items/add', {
     method: 'POST',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -121,7 +121,7 @@ export const addCartRequest = async (data: {
 export const deleteCartRequest = async (
   data: { productId: number } | { cartId: number }
 ) => {
-  const response = await fetch('http://localhost:3001/api/items/remove', {
+  const response = await fetch(useRequest() + '/api/items/remove', {
     method: 'DELETE',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -137,7 +137,7 @@ export const updateCartRequest = async (data: {
   productId: number;
   amount: number;
 }) => {
-  const response = await fetch('http://localhost:3001/api/items/modify', {
+  const response = await fetch(useRequest() + '/api/items/modify', {
     method: 'PUT',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -163,7 +163,7 @@ export const reviewRequest = async (data: {
   description: string;
   title: string;
 }) => {
-  const response = await fetch('http://localhost:3001/api/items/review', {
+  const response = await fetch(useRequest() + '/api/items/review', {
     method: 'POST',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -180,7 +180,7 @@ export const reviewRequest = async (data: {
 };
 
 export const delReviewRequest = async (data: { reviewId: number }) => {
-  const response = await fetch('http://localhost:3001/api/items/review', {
+  const response = await fetch(useRequest() + '/api/items/review', {
     method: 'DELETE',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -197,7 +197,7 @@ export const delReviewRequest = async (data: { reviewId: number }) => {
 };
 
 export const wishlistRequest = async (data: { productId: number }) => {
-  const response = await fetch('http://localhost:3001/api/items/wishlist', {
+  const response = await fetch(useRequest() + '/api/items/wishlist', {
     method: 'POST',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -214,7 +214,7 @@ export const wishlistRequest = async (data: { productId: number }) => {
 };
 
 export const delWishlistRequest = async (data: { wishListId: number }) => {
-  const response = await fetch('http://localhost:3001/api/items/wishlist', {
+  const response = await fetch(useRequest() + '/api/items/wishlist', {
     method: 'DELETE',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -231,7 +231,7 @@ export const delWishlistRequest = async (data: { wishListId: number }) => {
 };
 
 export const productsRequest = async () => {
-  const response = await fetch('http://localhost:3001/api/items/list', {
+  const response = await fetch(useRequest() + '/api/items/list', {
     method: 'GET',
   }).then((r) => r.json());
   // returns a list of products
@@ -240,7 +240,7 @@ export const productsRequest = async () => {
 };
 
 export const showProductRequest = async ({ id }: { id: string }) => {
-  const response = await fetch(`http://localhost:3001/api/items/id/${id}`).then(
+  const response = await fetch(`http://server:3001/api/items/id/${id}`).then(
     (r) => r.json()
   );
 
@@ -257,7 +257,7 @@ export const showProductRequest = async ({ id }: { id: string }) => {
 };
 
 export const purchaseRequest = async (data: { cartItems: Cart[] }) => {
-  const response = await fetch('http://localhost:3001/api/items/purchase', {
+  const response = await fetch(useRequest() + '/api/items/purchase', {
     method: 'POST',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -274,7 +274,7 @@ export const purchaseRequest = async (data: { cartItems: Cart[] }) => {
 };
 
 export const createPaymentRequest = async () => {
-  const response = await fetch('http://localhost:3001/api/create-payment', {
+  const response = await fetch(useRequest() + '/api/create-payment', {
     credentials: 'include',
   }).then((r) => r.json());
   return response as { stripeSecret: string } | Err;
@@ -290,7 +290,15 @@ export const getCategoryRequest = async (category?: string, tag?: string) => {
   console.log(params);
 
   const response = await fetch(
-    `http://localhost:3001/api/items/category?${params.toString()}`
+    `${useRequest()}/api/items/category?${params.toString()}`
   ).then((r) => r.json());
   return response as ListProduct[];
+};
+
+const useRequest = () => {
+  if (typeof window === 'undefined') {
+    return 'http://server:3001';
+  } else {
+    return 'http://localhost:3001';
+  }
 };

@@ -5,13 +5,13 @@ import type { RedisClientType } from '@node-redis/client/dist/lib/client';
 import redisClient from './redis';
 import e from 'express';
 
-class Client extends PrismaClient {
-  public redisCli: RedisClientType;
-  constructor(cacheClient: RedisClientType<any>) {
-    super();
-    this.redisCli = cacheClient;
-  }
-}
+// class Client extends PrismaClient {
+//   public redisCli: RedisClientType<any>;
+//   constructor(cacheClient: RedisClientType<any>) {
+//     super();
+//     this.redisCli = cacheClient;
+//   }
+// }
 
 const resetCacheActions: Prisma.PrismaAction[] = [
   'create',
@@ -23,7 +23,7 @@ const resetCacheActions: Prisma.PrismaAction[] = [
   'deleteMany',
 ];
 
-const prisma = new Client(redisClient);
+const prisma = new PrismaClient();
 
 prisma.$use(async (params, next) => {
   const str = (s: Object) => (s ? JSON.stringify(s) : '');

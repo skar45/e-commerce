@@ -18,19 +18,18 @@ import { createPayment } from './routes/createpayment';
 import { stripeHook } from './routes/stripehook';
 import { categoryRouter } from './routes/category';
 
-//const cors = require('cors');
 const app = express();
 
 const cors = (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.headers);
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader(
     'Access-Control-Allow-Methods',
     'OPTIONS, POST, PUT, DELETE, GET'
   );
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-  // res.header(headers);
   next();
 };
 

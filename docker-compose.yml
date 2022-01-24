@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ecom
+    networks:
+      - database
+  cache:
+    image: redis
+    networks:
+      - database
+  client:
+    build:
+     context: ./client
+     target: deps
+    ports:
+      - '3000:3000'
+    networks:
+      - backend
+    expose:
+      - 3000
+  server:
+    build: ./server
+    networks:
+      - backend
+      - database
+    depends_on:
+      - db
+      - cache
+    ports:
+      - '3001:3001'
+    expose:
+      - 3001
+networks:
+  backend: {}
+  database: {}

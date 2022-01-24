@@ -11,8 +11,3 @@ services:
       POSTGRES_USER: prisma
       POSTGRES_PASSWORD: prisma
       POSTGRES_DB: tests
-  # redis:
-  #   image: redis
-  #   container_name: intergration-tests-redis
-  #   ports:
-  #     - '6380:6379'

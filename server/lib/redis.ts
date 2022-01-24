@@ -1,7 +1,7 @@
 import { createClient } from 'redis';
 import { dbError } from '../middlewares/errorhandler';
 
-const redisClient = createClient();
+const redisClient = createClient({ socket: { host: 'cache' } });
 
 (async () => {
   await redisClient.connect();
