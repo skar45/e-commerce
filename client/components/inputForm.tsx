@@ -21,7 +21,14 @@ const Input = ({ placeholder, type, onChange, value }: Props) => {
   };
 
   return (
-    <div className="relative" onClick={focusHandler}>
+    <div
+      className="relative"
+      onClick={focusHandler}
+      onFocus={(e) => {
+        e.stopPropagation();
+        inputRef.current.focus();
+      }}
+    >
       <input
         ref={inputRef}
         className="w-full border-2 p-2 rounded focus:outline-none focus:ring focus:ring-blue-500 focus:border-transparent"

@@ -21,7 +21,6 @@ import { categoryRouter } from './routes/category';
 const app = express();
 
 const cors = (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.headers);
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader(
     'Access-Control-Allow-Methods',

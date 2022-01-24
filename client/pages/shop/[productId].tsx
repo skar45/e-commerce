@@ -249,7 +249,7 @@ const ReviewForm = ({
 
   const submitReview = async () => {
     const response = await reviewRequest({
-      rating,
+      rating: rating > 0 ? rating : 1,
       title,
       description: desc,
       productId,

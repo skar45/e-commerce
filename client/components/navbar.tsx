@@ -65,12 +65,12 @@ const NavBar = () => {
           showcase: [
             {
               name: 'Accessories',
-              link: '404',
+              link: 'category?category=men+accessories',
               img: 'm_ac.jpg',
             },
             {
               name: 'Outdoor Wear',
-              link: '404',
+              link: 'category?category=men+jacket+boots',
               img: 'm_hi.jpg',
             },
           ],
@@ -117,7 +117,7 @@ const NavBar = () => {
               </button>
             ) : (
               <div
-                className="text-center p-2 bg-gray-200 rounded-lg"
+                className="text-center p-2 bg-gray-200 rounded-lg cursor-pointer"
                 onClick={async () => {
                   await signoutRequest();
                   window.location.reload();

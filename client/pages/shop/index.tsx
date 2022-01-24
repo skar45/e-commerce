@@ -25,7 +25,13 @@ const Shop = ({ products }: InferGetStaticPropsType<typeof getStaticProps>) => {
             width="140px"
             title="Sort"
             options={[
-              { name: 'Featured', icon: iFeatured, action: () => {} },
+              {
+                name: 'Featured',
+                icon: iFeatured,
+                action: () => {
+                  setInventory(products);
+                },
+              },
               {
                 name: 'Price Up',
                 icon: iTrendUp,
