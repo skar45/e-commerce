@@ -25,7 +25,7 @@ const app = express();
 
 const httpsOptions = {
   cert: readFileSync('./ssl/acme-ecom_xyz.crt'),
-  ca: readFileSync('./ssl/acme-ecom_xyz.ca-bundle'),
+  ca: readFileSync('./ssl/acme-ecom_xyz.ca-budle'),
   key: readFileSync('./ssl/main.key'),
 };
 
