@@ -41,13 +41,13 @@ const cors = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-app.use((req: Request, res: Response, next: NextFunction) => {
-  if ((req.protocol = 'http')) {
-    res.redirect(301, `https://${req.headers.host}`);
-    return;
-  }
-  next();
-});
+// app.use((req: Request, res: Response, next: NextFunction) => {
+//   if ((req.protocol = 'http')) {
+//     res.redirect(301, `https://${req.headers.host}${req.path}`);
+//     return;
+//   }
+//   next();
+// });
 
 app.set('trust proxy', true);
 app.use(express.urlencoded({ extended: true }));
