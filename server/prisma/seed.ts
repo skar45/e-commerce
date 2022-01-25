@@ -4,6 +4,7 @@ import type { Product } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const main = async () => {
+  await prisma.product.deleteMany({});
   await prisma.product.createMany({
     data: [
       {
