@@ -1,17 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import type { Prisma, User } from '.prisma/client';
 import { dbError } from '../middlewares/errorhandler';
-import type { RedisClientType } from '@node-redis/client/dist/lib/client';
 import redisClient from './redis';
-import e from 'express';
-
-// class Client extends PrismaClient {
-//   public redisCli: RedisClientType<any>;
-//   constructor(cacheClient: RedisClientType<any>) {
-//     super();
-//     this.redisCli = cacheClient;
-//   }
-// }
 
 const resetCacheActions: Prisma.PrismaAction[] = [
   'create',
