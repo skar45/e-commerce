@@ -1,4 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
+import http from 'http';
+import https from 'https';
+import { readFileSync } from 'fs';
 import { signupRouter } from './routes/signup';
 import { signinRouter } from './routes/signin';
 import { signoutRouter } from './routes/signout';
@@ -20,6 +23,15 @@ import { categoryRouter } from './routes/category';
 
 const app = express();
 
+const httpsOptions = {
+  cert: readFileSync('./ssl/acme-ecom_xyz.crt'),
+  ca: readFileSync('./ssl/acme-ecom_xyz.ca-bundle'),
+  key: readFileSync('./ssl/main.key'),
+};
+
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(app);
+
 const cors = (req: Request, res: Response, next: NextFunction) => {
   res.setHeader('Access-Control-Allow-Origin', process.env.HOST!);
   res.setHeader(
@@ -31,6 +43,14 @@ const cors = (req: Request, res: Response, next: NextFunction) => {
 
   next();
 };
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  if ((req.protocol = 'http')) {
+    res.redirect(301, `https://${req.headers.host}${req.url}`);
+    return;
+  }
+  next();
+});
 
 app.set('trust proxy', true);
 app.use(express.urlencoded({ extended: true }));
