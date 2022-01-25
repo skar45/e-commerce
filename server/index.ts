@@ -1,5 +1,7 @@
-import app from './app';
+import { httpServer, httpsServer } from './app';
 
-app.listen(3001, () => {
+httpServer.listen(8000);
+
+httpsServer.listen(3001, () => {
   console.log('Listening on port 3001!');
 });

@@ -29,9 +29,6 @@ const httpsOptions = {
   key: readFileSync('./ssl/main.key'),
 };
 
-const httpServer = http.createServer(app);
-const httpsServer = https.createServer(app);
-
 const cors = (req: Request, res: Response, next: NextFunction) => {
   res.setHeader('Access-Control-Allow-Origin', process.env.HOST!);
   res.setHeader(
@@ -46,7 +43,7 @@ const cors = (req: Request, res: Response, next: NextFunction) => {
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   if ((req.protocol = 'http')) {
-    res.redirect(301, `https://${req.headers.host}${req.url}`);
+    res.redirect(301, `https://${req.headers.host}`);
     return;
   }
   next();
@@ -76,4 +73,7 @@ app.use(categoryRouter);
 
 app.use(errorHandler);
 
-export default app;
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(httpsOptions, app);
+
+export { httpServer, httpsServer };
