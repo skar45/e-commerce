@@ -10,7 +10,7 @@ Built with NodeJS for backend and React for frontend.
 ```
 docker-compose up
 ````
-Requires ENV variables for Stripe key, postgres, redis in ./server
+Requires ENV variables for Stripe key, postgres and redis in ./server
 postgres and redis urls must reference the service name in docker-compose.yml
 
 
