@@ -3,8 +3,6 @@ services:
   nginx:
     build: ./nginx
     restart: unless-stopped
-    volumes:
-      - ./data/certs:/etc/nginx/certs
     ports:
       - "80:80"
       - "443:443"

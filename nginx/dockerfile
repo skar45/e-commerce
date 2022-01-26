@@ -1,3 +1,5 @@
 FROM nginx
 
+
+COPY /data /etc/nginx/certs
 COPY proxy.conf /etc/nginx/conf.d/nginx.conf
