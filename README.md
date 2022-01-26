@@ -12,19 +12,19 @@ docker-compose up
 ````
 Requires ENV variables for Stripe key, postgres and redis in ./server.
 
+
 Postgres and redis urls must reference the service name in docker-compose.yml
 
 
 ## Demo
 
 Currently hosted on Linode.
-Link: http://139.177.199.145:3000/
+Link: https://acme-ecom.xyz
 
-Domain name and SSL certification is coming soon
 
 
 ## Features
-
+- Routing through Nginx proxy
 - Server-side Rendering through NextJS
 - DB Caching through Redis
 - Payment management by Stripe API
