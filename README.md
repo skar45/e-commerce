@@ -12,6 +12,7 @@ docker-compose up
 ````
 Requires ENV variables for Stripe key, postgres and redis in ./server.
 
+SSL needs to be edited in Nginx config for local use.
 
 Postgres and redis urls must reference the service name in docker-compose.yml
 
