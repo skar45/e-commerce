@@ -24,9 +24,9 @@ type ParsedCart = StoreType['data']['items'][number];
 
 const useRequest = () => {
   if (typeof window === 'undefined') {
-    return process.env.HOST || 'http://server:8000';
+    return process.env.HOST || 'http://server:8001';
   } else {
-    return process.env.NEXT_PUBLC_HOST || 'https://acme-ecom.xyz:3001';
+    return process.env.NEXT_PUBLC_HOST || 'https://acme-ecom.xyz';
   }
 };
 
