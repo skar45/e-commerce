@@ -64,14 +64,19 @@ const NavBar = () => {
           ],
           showcase: [
             {
-              name: 'Accessories',
-              link: 'category?category=men+accessories',
-              img: 'm_ac.jpg',
+              name: 'Waterproof',
+              link: 'category?=men&tag=waterproof',
+              img: 'main1.jpg',
             },
             {
               name: 'Outdoor Wear',
               link: 'category?category=men+jacket+boots',
               img: 'm_hi.jpg',
+            },
+            {
+              name: 'Accessories',
+              link: 'category?category=men+accessories',
+              img: 'm_ac.jpg',
             },
           ],
         },

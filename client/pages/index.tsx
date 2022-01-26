@@ -1,4 +1,5 @@
-import main from '../public/main.jpg';
+import women_s from '../public/women_s.jpg';
+import men_s from '../public/men_s.jpg';
 import { useRef } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -41,14 +42,14 @@ const Home: NextPage = () => {
         <h3 className="text-xl font-semibold mb-2">Shop Our Product Line: </h3>
         <section className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           <Card
-            title="Men's Wear"
-            link="category?category=men"
-            img="main.jpg"
-          />
-          <Card
             title="Women's Wear"
             link="category?category=women"
-            img="F1.jpg"
+            img={women_s.src}
+          />
+          <Card
+            title="Men's Wear"
+            link="category?category=men"
+            img={men_s.src}
           />
         </section>
       </div>
@@ -68,7 +69,7 @@ const Card = ({
   const router = useRouter();
   return (
     <div
-      style={{ backgroundImage: `url(${main.src})`, height: '600px' }}
+      style={{ backgroundImage: `url(${img})`, height: '600px' }}
       className="bg-cover p-12"
     >
       <div className="flex flex-col place-content-end gap-2 h-full">

@@ -31,7 +31,9 @@ const NavLink = ({ navmenu }: { navmenu: NavItems }) => {
       <button type="button">
         <span className="hover:text-gray-500">{navmenu.name}</span>
       </button>
-      {isOpen && <Menu menuData={navmenu.item.menu} title={navmenu.name} />}
+      <div onClick={() => setOpen(false)}>
+        {isOpen && <Menu menuData={navmenu.item.menu} title={navmenu.name} />}
+      </div>
     </div>
   );
 };
@@ -68,6 +70,7 @@ const Menu = ({ menuData, title }: { menuData: MenuItem; title: string }) => {
                 src={`/${m.img}`}
                 height={710}
                 width={660}
+                loading="eager"
                 layout="intrinsic"
               />
               <span>{m.name}</span>
