@@ -4,7 +4,6 @@ services:
     build: ./nginx
     restart: unless-stopped
     volumes:
-      volumes: 
       - ./data/certs:/etc/nginx/certs
     ports:
       - "80:80"
@@ -43,7 +42,7 @@ services:
       - '3001:3001'
     expose:
       - 3001
-      - 8000
+      - 8001
 networks:
   next-express: {}
   database: {}
