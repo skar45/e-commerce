@@ -36,8 +36,6 @@ services:
     depends_on:
       - db
       - cache
-    ports:
-      - '3001:3001'
     expose:
       - 3001
       - 8001
