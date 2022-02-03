@@ -47,7 +47,7 @@ module.exports = {
   },
   variants: {
     extend: {
-      display: ['focus, group-focus'],
+      scale: ['hover'],
       width: ['hover'],
     },
   },

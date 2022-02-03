@@ -266,13 +266,13 @@ const WishList = ({ items }: { items: StoreType['data']['wishlist'] }) => {
   }
 
   return (
-    <ol className="flex flex-wrap gap-2 p-2 w-full">
+    <ol className="flex flex-wrap justify-center gap-2 p-8 w-full">
       {items.map((w) => {
         return (
-          <li className="flex flex-col p-2" key={w.id}>
+          <li className="flex gap-1 flex-col p-2" key={w.id}>
             <img width={300} height={300} src={`/${w.Product.img[0]}`} />
-            <div className="flex justify-between">
-              <span>{w.Product.title}</span>
+            <div className="flex p-1 justify-between">
+              <span className="font-bold">{w.Product.title}</span>
               <button
                 onClick={() => {
                   delWishlist(w.id);

@@ -144,7 +144,7 @@ const ReviewSection = ({
   review.forEach((r) => {
     sortRating[r.rating] = sortRating[r.rating] + 1 || 1;
   });
-  console.log('rating: ', avgRating);
+
   return (
     <>
       <div className="flex flex-col w-full mt-12">

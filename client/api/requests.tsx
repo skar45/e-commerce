@@ -295,7 +295,6 @@ export const getCategoryRequest = async (category?: string, tag?: string) => {
     category && tag
       ? new URLSearchParams({ category, tag })
       : new URLSearchParams(category ? { category } : { tag });
-  console.log(params);
 
   const response = await fetch(
     `${useRequest()}/api/items/category?${params.toString()}`

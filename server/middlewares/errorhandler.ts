@@ -16,7 +16,8 @@ class CustomError extends Error {
 export const notfoundError = () => new CustomError(404, 'Route not found');
 export const requestError = (message: string) => new CustomError(400, message);
 export const dbError = () => new CustomError(500, 'Error connecting to db');
-export const authError = () => new CustomError(401, 'Not Authorized');
+export const authError = () =>
+  new CustomError(401, 'Log in to use this feature');
 
 export const errorHandler = (
   err: Error,

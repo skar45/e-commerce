@@ -62,7 +62,7 @@ const Search = ({ products }: Products) => {
 
 export async function getStaticProps() {
   const products = await productsRequest();
-  console.log('static search request');
+
   return { props: { products } };
 }
 

@@ -20,11 +20,10 @@ const Home: NextPage = () => {
             loop={true}
           ></video>
         </div>
-        <section className="z-10 mt-48 mx-auto p-4">
-          <article className="text-white font-bold text-5xl font-main my-12 animate-text-in">
+        <section className="flex flex-col items-center z-10 mt-48 mx-auto p-4">
+          <article className="text-white text-center font-bold text-5xl font-main my-12 animate-text-in">
             Explore new Heights
           </article>
-
           <button
             onClick={(e) =>
               document
@@ -40,7 +39,7 @@ const Home: NextPage = () => {
 
       <div className="px-4 py-20 sm:p-20  my-auto" id="items">
         <h3 className="text-xl font-semibold mb-2">Shop Our Product Line: </h3>
-        <section className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        <section className="grid grid-cols-1 gap-2 lg:grid-cols-2">
           <Card
             title="Women's Wear"
             link="category?category=women"
@@ -69,8 +68,8 @@ const Card = ({
   const router = useRouter();
   return (
     <div
-      style={{ backgroundImage: `url(${img})`, height: '600px' }}
-      className="bg-cover p-12"
+      style={{ backgroundImage: `url(${img})`, minHeight: '600px' }}
+      className="bg-center xl:bg-bottom bg-cover bg-no-repeat p-12 "
     >
       <div className="flex flex-col place-content-end gap-2 h-full">
         <h3 className="font-bold text-xl text-white">{title}</h3>

@@ -14,15 +14,15 @@ const validation = (req: Request, res: Response, next: NextFunction) => {
   username.trim();
 
   if (!rfc_5322.test(email)) {
-    throw requestError('invalid email');
+    throw requestError('Invalid Email');
   }
 
   if (!userValidation.test(username)) {
-    throw requestError('invalid username');
+    throw requestError('Invalid Username');
   }
 
   if (!passValidation.test(password)) {
-    throw requestError('invalid password');
+    throw requestError('Invalid Password');
   }
 
   next();

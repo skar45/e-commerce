@@ -3,10 +3,9 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useStore } from '../store/user-context';
 import { signinRequest, signupRequest } from '../api/requests';
 import Input from './inputForm';
-import { iClose, iError } from './Icons';
+import { iAccount, iClose, iError } from './Icons';
 
 const SignUp = ({ close }: { close: () => void }) => {
-  console.log('log in triggered');
   const [mounted, setMounted] = useState(false);
   const [el, setEl] = useState(document.createElement('div'));
 
@@ -34,7 +33,7 @@ const PopUp = ({ toggle }: { toggle: () => void }) => {
   return (
     <div className="absolute top-0 left-0 ">
       <div className="fixed flex justify-center z-50 w-full h-full">
-        <div className="mt-24  z-10 h-lg w-content p-3 bg-white rounded-lg border-2 ">
+        <div className="mt-24  z-10 h-lg w-96 p-3 bg-white rounded-lg border-2 ">
           <div className=" border-b-2">
             <button className="absolute flex " onClick={() => toggle()}>
               {iClose}
@@ -127,7 +126,7 @@ const SignInForm = () => {
           />
           <input
             type="submit"
-            className="bottom-2 bg-blue-500 rounded text-white font-medium p-2 px-4"
+            className="bottom-2 bg-blue-500 rounded text-white font-medium p-2 px-4 cursor-pointer"
             value="Log in"
           />
         </form>
@@ -150,6 +149,26 @@ const SignUpForm = () => {
 
     if (rePassword !== password) {
       setError('Password does not match');
+      return;
+    }
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long.');
+      return;
+    }
+
+    if (!password.match(/[a-z]+/)) {
+      setError('Password must have a lowercase letter.');
+      return;
+    }
+
+    if (!password.match(/[A-Z]+/)) {
+      setError('Password must have an uppercase letter.');
+      return;
+    }
+
+    if (!password.match(/\d+/)) {
+      setError('Password must have a number.');
       return;
     }
 
@@ -187,8 +206,15 @@ const SignUpForm = () => {
             </div>
           </div>
         ) : (
-          <div className=" p-4">
+          <div className="h-full p-4">
             <div className="flex flex-col space-y-4">
+              <button
+                className="flex gap-2 justify-center font-medium border rounded-full text-gray-600 p-1 px-4"
+                onClick={() => setCont(true)}
+              >
+                {iAccount}
+                {email}
+              </button>
               <Input
                 type="username"
                 value={username}
@@ -219,19 +245,11 @@ const SignUpForm = () => {
                 placeholder="Re-Enter Password"
                 type="password"
               />
-              <div className="flex justify-between space-x-2">
-                <button
-                  className="bg-blue-500 rounded text-white font-medium p-2 px-4"
-                  onClick={() => setCont(true)}
-                >
-                  Back
-                </button>
-                <input
-                  type="submit"
-                  className="bg-blue-500 rounded text-white font-medium p-2 px-4 cursor-pointer"
-                  value="Sign Up"
-                />
-              </div>
+              <input
+                type="submit"
+                className="bg-green-500 rounded text-white font-medium p-2 px-4 cursor-pointer"
+                value="Sign Up"
+              />
             </div>
           </div>
         )}
@@ -266,7 +284,7 @@ const Underline = () => {
 const ErrorDisplay = ({ message }: { message: string }) => {
   if (message) {
     return (
-      <div className="flex text-red-500 w-full p-4">
+      <div className="flex text-red-500 p-4 max-w-sm">
         <div className="bg-yellow-500 p-3 rounded-l-xl">{iError}</div>
         <span className="text-center p-2 font-semibold w-full border-t-2 border-r-2 border-b-2 rounded-r-xl">
           {message}

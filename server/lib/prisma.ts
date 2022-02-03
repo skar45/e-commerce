@@ -128,7 +128,6 @@ prisma.$use(async (params, next) => {
               params.args?.where?.category ||
               params.args?.where?.tags
             ) {
-              console.log(params.args);
               await redisClient.hSet(
                 params.model + 'Category',
                 str(params.args.where),

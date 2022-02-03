@@ -18,9 +18,9 @@ const AppComponent = ({ Component, pageProps }: AppProps) => {
         </div>
       </StoreProvider>
 
-      <div className=" relative mt-16">
+      <div className="relative mt-16">
         <footer className="absolute bottom-0 right-0 py-6 px-12">
-          <span className="font-thin text-sm">2022</span>
+          <span className="font-thin text-sm">github/skar45 ©2022</span>
         </footer>
       </div>
     </div>

@@ -8,7 +8,7 @@ import {
   useEffect,
 } from 'react';
 import { useWindowEvent } from '../hooks/use-window-event';
-import { iClose, iMenu } from './Icons';
+import { iClose, iExpLess, iExpMore, iMenu } from './Icons';
 import { NavItems, MenuItem } from './types';
 import SignUp from './signinModal';
 import { useStore } from '../store/user-context';
@@ -65,9 +65,10 @@ const MobilePopup = ({
       ref={mainRef}
       className="absolute mt-10 w-screen ml-4 border-2 bg-white transform -translate-x-full max-h-0 overflow-y-hidden shadow-md"
     >
-      <div className="flex flex-col items-center space-y-2 p-4">
-        <Link href="/cart">Cart</Link>
-
+      <div className="flex flex-col text-center space-y-2 p-4">
+        <div onClick={() => close()}>
+          <Link href="/cart">Cart</Link>
+        </div>
         {elements.map((elem, idx) => {
           if ('menu' in elem.item) {
             return (
@@ -86,7 +87,7 @@ const MobilePopup = ({
         })}
         {username ? (
           <div
-            className="text-center w-full p-2 bg-gray-200 rounded-lg"
+            className="text-center w-full p-2 py-4 bg-gray-200 rounded-lg"
             onClick={async () => {
               await signoutRequest();
               window.location.reload();
@@ -124,7 +125,7 @@ const Menu = ({
   return (
     <>
       <div
-        className="flex"
+        className="flex justify-center"
         onClick={(e: BaseSyntheticEvent) => {
           e.preventDefault();
 
@@ -136,11 +137,7 @@ const Menu = ({
         }}
       >
         {name}
-        {list.length > 0 ? (
-          <span className="material-icons">expand_less</span>
-        ) : (
-          <span className="material-icons">expand_more</span>
-        )}
+        {list.length > 0 ? <i>{iExpLess}</i> : <i>{iExpMore}</i>}
       </div>
       {list.length > 0 && <SubMenu items={list} close={close} />}
     </>

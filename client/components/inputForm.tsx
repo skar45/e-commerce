@@ -1,4 +1,10 @@
-import { ChangeEvent, MouseEvent, useRef, HTMLInputTypeAttribute } from 'react';
+import {
+  ChangeEvent,
+  MouseEvent,
+  useRef,
+  HTMLInputTypeAttribute,
+  useLayoutEffect,
+} from 'react';
 
 type Props = {
   placeholder: string;
@@ -11,19 +17,26 @@ const Input = ({ placeholder, type, onChange, value }: Props) => {
   const phRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const focusHandler = (e: MouseEvent) => {
+  const focusHandler = (e: MouseEvent) => {};
+
+  useLayoutEffect(() => {
+    if (value !== '') {
+      animPlaceholder();
+    }
+  }, []);
+
+  const animPlaceholder = () => {
     const { style } = phRef.current;
     phRef.current.classList.add('text-blue-500');
     style.transition = 'all 0.2s';
     style.fontSize = '14px';
     style.transform = 'translateY(-100%)';
-    inputRef.current.focus();
   };
 
   return (
     <div
       className="relative"
-      onClick={focusHandler}
+      onClick={() => animPlaceholder()}
       onFocus={(e) => {
         e.stopPropagation();
         inputRef.current.focus();
@@ -33,6 +46,7 @@ const Input = ({ placeholder, type, onChange, value }: Props) => {
         ref={inputRef}
         className="w-full border-2 p-2 rounded focus:outline-none focus:ring focus:ring-blue-500 focus:border-transparent"
         type={type}
+        onFocus={() => animPlaceholder()}
         onChange={onChange}
         value={value}
       />

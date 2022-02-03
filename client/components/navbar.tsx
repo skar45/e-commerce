@@ -8,6 +8,7 @@ import { getUserRequest, signoutRequest } from '../api/requests';
 import Logo from './logo';
 import NavLink from './navPopup';
 import ResponsiveMenu from './navMobile';
+import SelectMenu from './selectionMenu';
 
 const NavBar = () => {
   const navRef = useRef<HTMLDivElement>(null);
@@ -69,8 +70,8 @@ const NavBar = () => {
               img: 'main1.jpg',
             },
             {
-              name: 'Outdoor Wear',
-              link: 'category?category=men+jacket+boots',
+              name: 'Outdoor Footwear',
+              link: 'category?category=men+boots',
               img: 'm_hi.jpg',
             },
             {
@@ -94,7 +95,7 @@ const NavBar = () => {
           <Logo />
         </div>
 
-        <div className="hidden  sm:flex flex-row items-center justify-between gap-x-4">
+        <div className="hidden sm:flex flex-row items-center justify-between">
           {items.map((m, i) => {
             return (
               <div key={i}>
@@ -121,15 +122,27 @@ const NavBar = () => {
                 {iLogin}
               </button>
             ) : (
-              <div
-                className="text-center p-2 bg-gray-200 rounded-lg cursor-pointer"
-                onClick={async () => {
-                  await signoutRequest();
-                  window.location.reload();
-                }}
-              >
-                <span className="">{user}</span>
-              </div>
+              <SelectMenu
+                title={user}
+                options={[
+                  {
+                    action: async () => {
+                      await signoutRequest();
+                      window.location.reload();
+                    },
+                    name: 'Sign Out',
+                  },
+                ]}
+              />
+              // <div
+              //   className="text-center p-2 bg-gray-200 rounded-lg cursor-pointer"
+              //   onClick={async () => {
+              //     await signoutRequest();
+              //     window.location.reload();
+              //   }}
+              // >
+              //   <span className="">{user}</span>
+              // </div>
             )}
 
             {signUpMenu && <SignUp close={() => setSignUp(false)} />}
