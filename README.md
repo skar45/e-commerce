@@ -1,6 +1,5 @@
 # E-COMMERCE
 
-# Project Title
 
 An Ecommerce App designed to be used as a template to easily deploy e-commerce websites.
 By leveraging the power of server-side rendering through nextJS and database caching through redis, TTI (Time To Interactive) is increased.
